@@ -24,7 +24,7 @@
         </xsl:apply-templates>
     </xsl:template>
 
-    <!-- Match resources, call underlying template. -->i
+    <!-- Match resources, call underlying template. -->
     <xsl:template match="*[@rdf:resource]" mode="rels_ext_element">
       <xsl:param name="prefix"/>
       <xsl:param name="suffix"/>
