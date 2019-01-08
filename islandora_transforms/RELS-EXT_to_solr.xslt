@@ -39,14 +39,16 @@
     <xsl:template match="*[normalize-space(.)]" mode="rels_ext_element">
       <xsl:param name="prefix"/>
       <xsl:param name="suffix"/>
-      <xsl:if test="(string($index_compound_sequence) = 'true' or (string($index_compound_sequence) = 'false' and not(self::islandora-rels-ext:* and starts-with(local-name(), 'isSequenc
-        eNumberOf')))) and not(starts-with(local-name(), 'isHierarchicalLevelOf'))">
-        <xsl:call-template name="rels_ext_fields">
-          <xsl:with-param name="prefix" select="$prefix"/>
-          <xsl:with-param name="suffix" select="$suffix"/>
-          <xsl:with-param name="type">literal</xsl:with-param>
-          <xsl:with-param name="value" select="text()"/>
-        </xsl:call-template>
+      <xsl:if test="string($index_compound_sequence) = 'true' or (string($index_compound_sequence) = 'false' and not(self::islandora-rels-ext:* and starts-with(local-name(), 'isSequenc
+        eNumberOf')))">
+        <xsl:if test="not(starts-with(local-name(), 'isHierarchicalLevelOf'))">
+          <xsl:call-template name="rels_ext_fields">
+            <xsl:with-param name="prefix" select="$prefix"/>
+            <xsl:with-param name="suffix" select="$suffix"/>
+            <xsl:with-param name="type">literal</xsl:with-param>
+            <xsl:with-param name="value" select="text()"/>
+          </xsl:call-template>
+        </xsl:if>
       </xsl:if>
     </xsl:template>
 
