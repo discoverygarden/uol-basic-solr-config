@@ -39,8 +39,7 @@
     <xsl:template match="*[normalize-space(.)]" mode="rels_ext_element">
       <xsl:param name="prefix"/>
       <xsl:param name="suffix"/>
-      <xsl:if test="string($index_compound_sequence) = 'true' or (string($index_compound_sequence) = 'false' and not(self::islandora-rels-ext:* and starts-with(local-name(), 'isSequenc
-        eNumberOf')))">
+      <xsl:if test="string($index_compound_sequence) = 'true' or (string($index_compound_sequence) = 'false' and not(self::islandora-rels-ext:* and starts-with(local-name(), 'isSequenceNumberOf')))">
         <xsl:if test="not(starts-with(local-name(), 'isHierarchicalLevelOf'))">
           <xsl:call-template name="rels_ext_fields">
             <xsl:with-param name="prefix" select="$prefix"/>
