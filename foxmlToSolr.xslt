@@ -127,6 +127,7 @@
   <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/ancestors_models_to_solr_field.xslt"/>
   <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/library/xslt-date-template.xslt"/>
   <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/research_data_versions.xslt"/>
+  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/index_parent_info.xslt"/>
 
   <!-- Decide which objects to modify the index of -->
   <xsl:template match="/">
@@ -310,6 +311,36 @@
         <xsl:for-each select="xalan:nodeset($ancestors)//sparql:obj[@uri != concat('info:fedora/', $PID)]">
           <field name="ancestors_ms"><xsl:value-of select="substring-after(@uri, '/')"/></field>
         </xsl:for-each>
+
+	<!-- Index parent compound objects. -->
+      	<xsl:variable name="displayLabels">
+          <xsl:call-template name="perform_ri_query">
+            <xsl:with-param name="PID" select="$PID"/>
+            <xsl:with-param name="query">
+              PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
+              PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
+              SELECT ?parent
+              FROM &lt;#ri&gt;
+              WHERE {
+                {
+                  &lt;info:fedora/%PID%&gt; fre:isConstituentOf ?parent .
+                  ?parent fm:hasModel &lt;info:fedora/islandora:compoundCModel&gt;
+                }
+		UNION {
+		  BIND(&lt;info:fedora/%PID%&gt; AS ?parent)
+		}
+              }
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:for-each select="xalan:nodeset($displayLabels)//sparql:parent">
+          <xsl:call-template name="displayLabel_writer">
+            <xsl:with-param name="prefix">related_</xsl:with-param>
+            <xsl:with-param name="content" select="document(concat($PROT, '://', encoder:encode($FEDORAUSER), ':', encoder:encode($FEDORAPASS), '@', $HOST, ':', $PORT, '/fedora/objects/', substring-after(@uri, '/'), '/datastreams/MODS/content'))//mods:mods[1]"/>
+          </xsl:call-template>
+	</xsl:for-each>
+
+	<!-- End Query-->
       </xsl:if>
 
       <xsl:if test="string($index_ancestors_models) = 'true'">
