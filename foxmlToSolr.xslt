@@ -344,7 +344,6 @@
         </xsl:call-template>
       </xsl:variable>
       <xsl:for-each select="xalan:nodeset($displayLabels)//sparql:child">
-        <field name="test"><xsl:value-of select="$displayLabels" /></field>
         <xsl:call-template name="displayLabel_writer">
           <xsl:with-param name="prefix">related_</xsl:with-param>
           <xsl:with-param name="content" select="document(concat($PROT, '://', encoder:encode($FEDORAUSER), ':', encoder:encode($FEDORAPASS), '@', $HOST, ':', $PORT, '/fedora/objects/', substring-after(@uri, '/'), '/datastreams/MODS/content'))//mods:mods[1]"/>
@@ -420,7 +419,6 @@
         </xsl:call-template>
       </xsl:variable>
       <xsl:for-each select="xalan:nodeset($displayLabels_child)//sparql:parent">
-        <field name="test"><xsl:value-of select="$displayLabels" /></field>
         <xsl:call-template name="displayLabel_writer">
           <xsl:with-param name="prefix">related_</xsl:with-param>
           <xsl:with-param name="content" select="document(concat($PROT, '://', encoder:encode($FEDORAUSER), ':', encoder:encode($FEDORAPASS), '@', $HOST, ':', $PORT, '/fedora/objects/', substring-after(@uri, '/'), '/datastreams/MODS/content'))//mods:mods[1]"/>
