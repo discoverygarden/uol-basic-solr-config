@@ -56,12 +56,12 @@
   <xsl:template name="dateOther_writer">
     <xsl:param name="content"/>
     <xsl:param name="prefix"/>
-    <xsl:param name="suffix">_ms</xsl:param>
+    <xsl:param name="suffix">_mdt</xsl:param>
     <!-- OriginInfo: dateOther. -->
     <xsl:for-each select="$content/mods:originInfo/mods:dateOther[@encoding='w3cdtf' and @type='embargo']">
       <field>
         <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, 'mods_originInfo_dateOther_encoding_embargo', $suffix)"/>
+          <xsl:value-of select="concat($prefix, 'mods_originInfo_encoding_w3cdtf_type_embargo_dateOther', $suffix)"/>
         </xsl:attribute>
         <xsl:value-of select="text()"/>
       </field>
