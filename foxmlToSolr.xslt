@@ -311,7 +311,6 @@
         <xsl:for-each select="xalan:nodeset($ancestors)//sparql:obj[@uri != concat('info:fedora/', $PID)]">
           <field name="ancestors_ms"><xsl:value-of select="substring-after(@uri, '/')"/></field>
         </xsl:for-each>
-
       </xsl:if>
 
       <xsl:if test="string($index_ancestors_models) = 'true'">
