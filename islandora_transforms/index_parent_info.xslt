@@ -59,12 +59,21 @@
     <xsl:param name="suffix">_mdt</xsl:param>
     <!-- OriginInfo: dateOther. -->
     <xsl:for-each select="$content/mods:originInfo/mods:dateOther[@encoding='w3cdtf' and @type='embargo']">
-      <field>
-        <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, 'mods_originInfo_encoding_w3cdtf_type_embargo_dateOther', $suffix)"/>
-        </xsl:attribute>
-        <xsl:value-of select="text()"/>
-      </field>
+      <xsl:variable name="dateValue">
+        <xsl:call-template name="get_ISO8601_date">
+          <xsl:with-param name="date" select="current()" />
+          <xsl:with-param name="pid" select="$PID" />
+          <xsl:with-param name="datastream" select="MODS" />
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="not(normalize-space($dateValue)='')">
+        <field>
+          <xsl:attribute name="name">
+            <xsl:value-of select="concat($prefix, 'mods_originInfo_encoding_w3cdtf_type_embargo_dateOther', $suffix)"/>
+          </xsl:attribute>
+          <xsl:value-of select="$dateValue"/>
+        </field>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>
