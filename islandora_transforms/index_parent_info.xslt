@@ -27,7 +27,7 @@
      <xsl:param name="prefix"/>
      <xsl:param name="suffix">_ms</xsl:param>
      <!-- Display Label. -->
-     <xsl:for-each select="$content/mods:accessCondition/mods:displayLabel">
+     <xsl:for-each select="$content/mods:accessCondition/@displayLabel">
        <field>
          <xsl:attribute name="name">
            <xsl:value-of select="concat($prefix, 'mods_accessCondition_displayLabel', $suffix)"/>
@@ -43,7 +43,7 @@
     <xsl:param name="prefix"/>
     <xsl:param name="suffix">_ms</xsl:param>
     <!-- AccessCondition: type. -->
-    <xsl:for-each select="$content/mods:accessCondition/mods:type">
+    <xsl:for-each select="$content/mods:accessCondition/@type">
       <field>
         <xsl:attribute name="name">
           <xsl:value-of select="concat($prefix, 'mods_accessCondition_type', $suffix)"/>
