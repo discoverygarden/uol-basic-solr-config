@@ -32,7 +32,7 @@
          <xsl:attribute name="name">
            <xsl:value-of select="concat($prefix, 'mods_accessCondition_displayLabel', $suffix)"/>
          </xsl:attribute>
-         <xsl:value-of select="text()"/>
+         <xsl:value-of select="."/>
        </field>
      </xsl:for-each>
    </xsl:template>
@@ -48,7 +48,7 @@
         <xsl:attribute name="name">
           <xsl:value-of select="concat($prefix, 'mods_accessCondition_type', $suffix)"/>
         </xsl:attribute>
-        <xsl:value-of select="text()"/>
+        <xsl:value-of select="."/>
       </field>
     </xsl:for-each>
   </xsl:template>
