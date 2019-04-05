@@ -26,7 +26,8 @@
   xmlns:java="http://xml.apache.org/xalan/java"
   xmlns:dgi-e="xalan://ca.discoverygarden.gsearch_extensions"
   xmlns:sparql="http://www.w3.org/2001/sw/DataAccess/rf1/result"
-  xmlns:xalan="http://xml.apache.org/xalan">
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:string="xalan://java.lang.String">
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
@@ -326,24 +327,23 @@
       </xsl:if>
 
       <!-- Index parent compound objects. -->
-      <xsl:variable name="displayLabels">
-        <xsl:call-template name="perform_ri_query">
-          <xsl:with-param name="PID" select="$PID"/>
-          <xsl:with-param name="query">
-            PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
-            PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
-            SELECT ?child
-            FROM &lt;#ri&gt;
-            WHERE {
-              {
-                ?child fre:isConstituentOf &lt;info:fedora/%PID%&gt; .
-                &lt;info:fedora/%PID%&gt; fm:hasModel &lt;info:fedora/islandora:compoundCModel&gt;
-              }
-            }
-          </xsl:with-param>
+      <xsl:variable name="placeholder_query">
+        PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
+        PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
+        SELECT ?child
+        FROM &lt;#ri&gt;
+        WHERE {
+          ?child fre:isConstituentOf &lt;info:fedora/%PID%&gt; .
+          &lt;info:fedora/%PID%&gt; fm:hasModel &lt;info:fedora/islandora:compoundCModel&gt;
+        }
+      </xsl:variable>
+      <xsl:variable name="compound_children">
+        <xsl:call-template name="perform_traversal_query">
+          <xsl:with-param name="query" select="string:replaceAll($placeholder_query, '%PID%', $PID)" />
+          <xsl:with-param name="lang">sparql</xsl:with-param>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:for-each select="xalan:nodeset($displayLabels)//sparql:child">
+      <xsl:for-each select="xalan:nodeset($compound_children)//sparql:child">
         <xsl:call-template name="displayLabel_writer">
           <xsl:with-param name="prefix">related_</xsl:with-param>
           <xsl:with-param name="content" select="document(concat($PROT, '://', encoder:encode($FEDORAUSER), ':', encoder:encode($FEDORAPASS), '@', $HOST, ':', $PORT, '/fedora/objects/', substring-after(@uri, '/'), '/datastreams/MODS/content'))//mods:mods[1]"/>
@@ -351,24 +351,7 @@
       </xsl:for-each>
 
       <!-- Index accessCondition type compound objects. -->
-      <xsl:variable name="accessType">
-        <xsl:call-template name="perform_ri_query">
-          <xsl:with-param name="PID" select="$PID"/>
-          <xsl:with-param name="query">
-            PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
-            PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
-            SELECT ?child
-            FROM &lt;#ri&gt;
-            WHERE {
-              {
-                ?child fre:isConstituentOf &lt;info:fedora/%PID%&gt; .
-                &lt;info:fedora/%PID%&gt; fm:hasModel &lt;info:fedora/islandora:compoundCModel&gt;
-              }
-            }
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:for-each select="xalan:nodeset($accessType)//sparql:child">
+      <xsl:for-each select="xalan:nodeset($compound_children)//sparql:child">
         <xsl:call-template name="type_writer">
           <xsl:with-param name="prefix">related_</xsl:with-param>
           <xsl:with-param name="content" select="document(concat($PROT, '://', encoder:encode($FEDORAUSER), ':', encoder:encode($FEDORAPASS), '@', $HOST, ':', $PORT, '/fedora/objects/', substring-after(@uri, '/'), '/datastreams/MODS/content'))//mods:mods[1]"/>
@@ -376,24 +359,7 @@
       </xsl:for-each>
 
       <!-- Index originInfo dateOther compound objects. -->
-      <xsl:variable name="originInfo_dateOther">
-        <xsl:call-template name="perform_ri_query">
-          <xsl:with-param name="PID" select="$PID"/>
-          <xsl:with-param name="query">
-            PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
-            PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
-            SELECT ?child
-            FROM &lt;#ri&gt;
-            WHERE {
-              {
-                ?child fre:isConstituentOf &lt;info:fedora/%PID%&gt; .
-                &lt;info:fedora/%PID%&gt; fm:hasModel &lt;info:fedora/islandora:compoundCModel&gt;
-              }
-            }
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:for-each select="xalan:nodeset($originInfo_dateOther)//sparql:child">
+      <xsl:for-each select="xalan:nodeset($compound_children)//sparql:child">
         <xsl:call-template name="dateOther_writer">
           <xsl:with-param name="prefix">related_</xsl:with-param>
           <xsl:with-param name="content" select="document(concat($PROT, '://', encoder:encode($FEDORAUSER), ':', encoder:encode($FEDORAPASS), '@', $HOST, ':', $PORT, '/fedora/objects/', substring-after(@uri, '/'), '/datastreams/MODS/content'))//mods:mods[1]"/>

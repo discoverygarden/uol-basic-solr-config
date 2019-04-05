@@ -5,19 +5,6 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:mods="http://www.loc.gov/mods/v3">
 
-  <xsl:template name="perform_ri_query">
-    <xsl:param name="PID"/>
-    <xsl:param name="risearch">http://localhost:8080/fedora/risearch</xsl:param>
-    <xsl:param name="query"/>
-    <xsl:param name="lang">sparql</xsl:param>
-    <xsl:param name="additional_params"/>
-
-    <xsl:variable name="encoded_query" select="encoder:encode(normalize-space(string:replaceAll($query, '%PID%', $PID)))"/>
-    <xsl:variable name="query_url" select="concat($risearch, '?query=', $encoded_query, '&amp;lang=', $lang, $additional_params)"/>
-
-    <xsl:copy-of select="document($query_url)"/>
-  </xsl:template>
-
   <!-- Templates for indexing pinpointed info from parents. These have many-to-
        one and/or many-to-many relationships with documents, so ignoring the
        standard MODS indexing to ensure only multivalued fields are used. -->
@@ -36,7 +23,6 @@
        </field>
      </xsl:for-each>
    </xsl:template>
-
 
   <xsl:template name="type_writer">
     <xsl:param name="content"/>
