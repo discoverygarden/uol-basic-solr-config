@@ -9,7 +9,6 @@ If one wishes to index Drupal content and users, one might process the `conf/dat
 
 The 4.10.x branch is setup to utilize solr 4.10ish configurations. These have been successfully tested with solr 4.10.3.
 
-
 One major difference between solr 3.x and 4.x is when deploying configs they used to go to /usr/local/fedora/solr now they get deployed to /usr/local/fedora/solr/collection1 instead.
 
 You also have to copy the jars from solr/example/lib/ext/* to $CATALINA_HOME/webapps/solr/WEB-INF/lib/ for more information see https://wiki.apache.org/solr/SolrLogging#Using_the_example_logging_setup_in_containers_other_than_Jetty
